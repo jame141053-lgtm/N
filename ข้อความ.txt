@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ร้านกู้ชีพงานค้าง</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Kanit:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #e91e8c;
+    --pink-light: #f472b6;
+    --pink-pale: #fce7f3;
+    --pink-bg: #fff0f7;
+    --pink-dark: #be185d;
+    --green: #16a34a;
+    --green-bright: #22c55e;
+    --white: #ffffff;
+    --gray: #6b7280;
+    --border: #fad4e8;
+    --text: #1f2937;
+    --text-muted: #9ca3af;
+    --gold: #f59e0b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Sarabun', sans-serif; background: var(--pink-bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+/* HEADER */
+header {
+position: relative; text-align: center; padding: 60px 20px 50px;
+background: linear-gradient(135deg, #fff0f7 0%, #fce7f3 50%, #fdf2f8 100%);
+border-bottom: 3px solid var(–pink-light); overflow: hidden;
+}
+header::before {
+content: ‘’; position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+width: 600px; height: 300px;
+background: radial-gradient(ellipse, rgba(233,30,140,0.1) 0%, transparent 70%);
+pointer-events: none;
+}
+.badge {
+display: inline-block; background: linear-gradient(135deg, var(–pink), var(–pink-dark));
+color: #fff; font-family: ‘Kanit’, sans-serif; font-size: 11px; font-weight: 700;
+letter-spacing: 3px; text-transform: uppercase; padding: 5px 18px; border-radius: 20px;
+margin-bottom: 18px; animation: fadeDown 0.6s ease both;
+box-shadow: 0 2px 12px rgba(233,30,140,0.3);
+}
+h1 { font-family: ‘Kanit’, sans-serif; font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 900; line-height: 1.1; color: var(–text); animation: fadeDown 0.8s ease both; animation-delay: 0.1s; }
+h1 span { color: var(–pink); }
+.tagline { margin-top: 14px; font-size: 1.05rem; color: var(–gray); animation: fadeDown 0.8s ease both; animation-delay: 0.2s; }
+.cta-btn {
+margin-top: 32px; display: inline-block;
+background: linear-gradient(135deg, var(–green-bright), var(–green));
+color: #fff; font-family: ‘Kanit’, sans-serif; font-size: 1.2rem; font-weight: 700;
+padding: 16px 48px; border: none; border-radius: 50px; cursor: pointer; letter-spacing: 1px;
+box-shadow: 0 4px 24px rgba(34,197,94,0.4); transition: transform 0.15s, box-shadow 0.15s;
+animation: fadeDown 0.8s ease both; animation-delay: 0.3s; position: relative; overflow: hidden;
+}
+.cta-btn::after { content: ‘’; position: absolute; top: 0; left: -100%; width: 60%; height: 100%; background: rgba(255,255,255,0.2); transform: skewX(-20deg); transition: left 0.4s; }
+.cta-btn:hover::after { left: 150%; }
+.cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(34,197,94,0.5); }
+@keyframes fadeDown { from { opacity: 0; transform: translateY(-18px); } to { opacity: 1; transform: translateY(0); } }
+
+/* SECTION */
+.section { padding: 60px 20px; max-width: 1000px; margin: 0 auto; }
+.section-title { font-family: ‘Kanit’, sans-serif; font-size: 1.6rem; font-weight: 700; color: var(–pink-dark); text-align: center; margin-bottom: 8px; }
+.section-sub { text-align: center; color: var(–gray); font-size: 0.95rem; margin-bottom: 40px; }
+
+/* REVIEWS */
+.reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.review-card {
+background: var(–white); border: 1.5px solid var(–border); border-radius: 16px;
+padding: 24px 20px; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+position: relative; overflow: hidden;
+}
+.review-card::before { content: ‘”’; font-family: ‘Kanit’, sans-serif; font-size: 6rem; color: rgba(233,30,140,0.06); position: absolute; top: -10px; right: 14px; line-height: 1; }
+.review-card:hover { border-color: var(–pink-light); transform: translateY(-4px); box-shadow: 0 8px 32px rgba(233,30,140,0.12); }
+.reviewer-info { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.reviewer-avatar { width: 52px; height: 52px; border-radius: 50%; border: 2px solid var(–pink-light); background: var(–pink-pale); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+.reviewer-name { font-weight: 700; font-size: 1rem; color: var(–text); }
+.reviewer-role { font-size: 0.82rem; color: var(–text-muted); margin-top: 2px; }
+.stars { color: var(–gold); font-size: 0.9rem; margin-bottom: 6px; }
+.review-text { font-size: 0.93rem; line-height: 1.65; color: var(–gray); }
+.delete-review-btn { position: absolute; top: 10px; left: 12px; background: none; border: none; color: #fca5a5; font-size: 0.78rem; cursor: pointer; opacity: 0.4; transition: opacity 0.15s, color 0.15s; }
+.delete-review-btn:hover { opacity: 1; color: #ef4444; }
+.add-review-btn {
+display: block; margin: 28px auto 0;
+background: linear-gradient(135deg, var(–pink), var(–pink-dark));
+color: #fff; border: none; border-radius: 50px; padding: 12px 32px;
+font-family: ‘Kanit’, sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer;
+box-shadow: 0 4px 16px rgba(233,30,140,0.3); transition: transform 0.15s, box-shadow 0.15s;
+}
+.add-review-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(233,30,140,0.4); }
+.empty-reviews { text-align: center; color: var(–text-muted); padding: 40px 20px; font-size: 1rem; grid-column: 1/-1; }
+.empty-reviews .icon { font-size: 3rem; margin-bottom: 10px; }
+
+/* DIVIDER */
+.divider { height: 1px; background: linear-gradient(to right, transparent, var(–border), transparent); margin: 0 40px; }
+
+/* MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(233,30,140,0.08); z-index: 1000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(6px); }
+.modal-overlay.active { display: flex; }
+.modal { background: var(–white); border: 1.5px solid var(–border); border-radius: 20px; padding: 36px 32px; max-width: 480px; width: 100%; box-shadow: 0 20px 80px rgba(233,30,140,0.15); animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+.modal-title { font-family: ‘Kanit’, sans-serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 6px; color: var(–text); }
+.modal-sub { font-size: 0.88rem; color: var(–text-muted); margin-bottom: 24px; }
+.close-btn { float: right; background: none; border: none; color: var(–text-muted); font-size: 1.5rem; cursor: pointer; line-height: 1; margin-top: -6px; }
+.close-btn:hover { color: var(–pink); }
+
+/* FORM */
+.form-label { display: block; font-size: 0.88rem; font-weight: 600; color: var(–pink-dark); margin-bottom: 8px; letter-spacing: 0.5px; }
+.form-input { width: 100%; background: var(–pink-bg); border: 1.5px solid var(–border); border-radius: 10px; padding: 12px 16px; color: var(–text); font-family: ‘Sarabun’, sans-serif; font-size: 1rem; margin-bottom: 18px; transition: border-color 0.2s; outline: none; }
+.form-input:focus { border-color: var(–pink); }
+.form-input::placeholder { color: #d1a0bc; }
+
+/* JOB GRID */
+.job-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.job-option { border: 2px solid var(–border); border-radius: 12px; padding: 14px 12px; cursor: pointer; transition: border-color 0.2s, background 0.2s; text-align: center; font-size: 0.9rem; line-height: 1.4; background: var(–pink-bg); color: var(–gray); }
+.job-option:hover { border-color: var(–pink-light); background: var(–pink-pale); color: var(–pink-dark); }
+.job-option.selected { border-color: var(–pink); background: var(–pink-pale); color: var(–pink-dark); font-weight: 700; }
+.job-icon { font-size: 1.5rem; display: block; margin-bottom: 6px; }
+
+/* STARS */
+.star-rating { display: flex; gap: 6px; margin-bottom: 18px; }
+.star-btn { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #e5e7eb; transition: color 0.15s, transform 0.1s; line-height: 1; }
+.star-btn.active { color: var(–gold); }
+.star-btn:hover { transform: scale(1.15); }
+
+/* BUTTONS */
+.submit-btn { width: 100%; background: linear-gradient(135deg, var(–green-bright), var(–green)); color: #fff; border: none; border-radius: 50px; padding: 15px; font-family: ‘Kanit’, sans-serif; font-size: 1.1rem; font-weight: 700; cursor: pointer; letter-spacing: 0.5px; transition: transform 0.15s, box-shadow 0.15s; box-shadow: 0 4px 16px rgba(34,197,94,0.3); margin-top: 6px; }
+.submit-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(34,197,94,0.4); }
+.submit-btn:disabled { background: #d1d5db; color: #9ca3af; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-pink { background: linear-gradient(135deg, var(–pink), var(–pink-dark)) !important; box-shadow: 0 4px 16px rgba(233,30,140,0.3) !important; }
+.btn-pink:hover { box-shadow: 0 6px 24px rgba(233,30,140,0.4) !important; }
+.btn-red { background: linear-gradient(135deg, #ef4444, #b91c1c) !important; box-shadow: 0 4px 16px rgba(239,68,68,0.3) !important; }
+
+/* SUCCESS */
+.success-box { text-align: center; padding: 20px 0; }
+.success-icon { font-size: 4rem; margin-bottom: 14px; }
+.success-title { font-family: ‘Kanit’, sans-serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; color: var(–green); }
+.success-text { color: var(–gray); font-size: 0.95rem; line-height: 1.6; white-space: pre-line; }
+
+/* TOKEN BOX */
+.token-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 16px; margin-bottom: 20px; font-size: 0.88rem; color: #166534; }
+.token-box strong { color: #16a34a; display: block; margin-bottom: 6px; }
+.token-input-row { display: flex; gap: 8px; margin-top: 10px; }
+.token-input-row input { flex: 1; background: #fff; border: 1px solid #bbf7d0; border-radius: 6px; padding: 9px 12px; color: var(–text); font-size: 0.85rem; font-family: monospace; outline: none; }
+.token-input-row input:focus { border-color: var(–green); }
+.save-token-btn { background: var(–green); color: #fff; border: none; border-radius: 6px; padding: 9px 16px; font-family: ‘Sarabun’, sans-serif; font-size: 0.88rem; cursor: pointer; white-space: nowrap; transition: background 0.15s; }
+.save-token-btn:hover { background: #15803d; }
+
+/* FOOTER */
+footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(–border); color: var(–text-muted); font-size: 0.85rem; background: var(–white); }
+footer span { color: var(–pink); }
+
+/* SETTINGS BTN */
+.settings-btn { position: fixed; bottom: 24px; right: 24px; background: var(–white); border: 1.5px solid var(–border); border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.3rem; z-index: 100; transition: background 0.15s, border-color 0.15s; box-shadow: 0 2px 16px rgba(233,30,140,0.15); }
+.settings-btn:hover { background: var(–pink-pale); border-color: var(–pink-light); }
+
+.spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 8px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.error-msg { color: #ef4444; font-size: 0.85rem; margin-top: -12px; margin-bottom: 12px; }
+</style>
+
+</head>
+<body>
+
+<header>
+  <div class="badge">🌸 บริการด่วน · รับงานทุกชิ้น</div>
+  <h1>ร้าน<span>กู้ชีพ</span>งานค้าง</h1>
+  <p class="tagline">ส่งงานช้า? ค้างมานาน? เราช่วยได้ · รวดเร็ว · มืออาชีพ</p>
+  <button class="cta-btn" onclick="openModal()">🚀 เริ่มจ้างงาน</button>
+</header>
+
+<div class="section">
+  <div class="section-title">💬 รีวิวจากลูกค้า</div>
+  <div class="section-sub">ความประทับใจจากลูกค้าจริง ✨</div>
+  <div class="reviews-grid" id="reviews-container"></div>
+  <button class="add-review-btn" onclick="openReviewModal()">✏️ เขียนรีวิว</button>
+</div>
+
+<div class="divider"></div>
+
+<!-- MODAL: จ้างงาน -->
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div id="step1">
+      <button class="close-btn" onclick="closeModal()">✕</button>
+      <div class="modal-title">📋 จ้างงาน</div>
+      <div class="modal-sub">กรอกข้อมูลและเลือกงานที่ต้องการ</div>
+      <label class="form-label">ชื่อ</label>
+      <input class="form-input" id="firstName" type="text" placeholder="ชื่อของคุณ" />
+      <label class="form-label">นามสกุล</label>
+      <input class="form-input" id="lastName" type="text" placeholder="นามสกุลของคุณ" />
+      <label class="form-label">เลือกประเภทงาน</label>
+      <div class="job-grid">
+        <div class="job-option" onclick="selectJob(this,'งานแก้ข้อสอบ')"><span class="job-icon">📝</span>แก้ข้อสอบ</div>
+        <div class="job-option" onclick="selectJob(this,'งานแก้ 0 ร มส')"><span class="job-icon">🔴</span>แก้ 0 ร มส</div>
+        <div class="job-option" onclick="selectJob(this,'งานค้าง')"><span class="job-icon">⏰</span>งานค้าง</div>
+        <div class="job-option" onclick="selectJob(this,'ใบงานแคนวา')"><span class="job-icon">🎨</span>ใบงาน Canva</div>
+        <div class="job-option" style="grid-column:span 2" onclick="selectJob(this,'สไลด์พรีเซน Canva')"><span class="job-icon">🖥️</span>สไลด์พรีเซน Canva</div>
+      </div>
+      <div id="job-error" class="error-msg" style="display:none;">⚠️ กรุณาเลือกประเภทงาน</div>
+      <button class="submit-btn" id="submit-btn" onclick="submitJob()">✅ ส่งจ้างงาน</button>
+    </div>
+    <div id="step-success" style="display:none;">
+      <div class="success-box">
+        <div class="success-icon">🎉</div>
+        <div class="success-title">ส่งคำสั่งจ้างงานแล้ว!</div>
+        <div class="success-text" id="success-msg"></div>
+        <br><button class="submit-btn" onclick="closeModal()" style="margin-top:10px;">ปิด</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: รีวิว -->
+
+<div class="modal-overlay" id="review-modal">
+  <div class="modal">
+    <button class="close-btn" onclick="closeReviewModal()">✕</button>
+    <div class="modal-title">✏️ เขียนรีวิว</div>
+    <div class="modal-sub">แชร์ประสบการณ์ของคุณให้คนอื่นรู้</div>
+    <label class="form-label">ชื่อผู้รีวิว</label>
+    <input class="form-input" id="rev-name" type="text" placeholder="ชื่อของคุณ" />
+    <label class="form-label">บทบาท (เช่น นักศึกษาปี 2)</label>
+    <input class="form-input" id="rev-role" type="text" placeholder="บทบาทของคุณ" />
+    <label class="form-label">ให้คะแนน</label>
+    <div class="star-rating" id="star-rating">
+      <button class="star-btn" onclick="setStars(1)">★</button>
+      <button class="star-btn" onclick="setStars(2)">★</button>
+      <button class="star-btn" onclick="setStars(3)">★</button>
+      <button class="star-btn" onclick="setStars(4)">★</button>
+      <button class="star-btn" onclick="setStars(5)">★</button>
+    </div>
+    <label class="form-label">รีวิวของคุณ</label>
+    <textarea class="form-input" id="rev-text" rows="3" placeholder="บอกเล่าประสบการณ์ที่ใช้บริการ..."></textarea>
+    <div id="rev-error" class="error-msg" style="display:none;">⚠️ กรุณากรอกชื่อและรีวิว</div>
+    <button class="submit-btn btn-pink" onclick="submitReview()">💬 โพสต์รีวิว</button>
+  </div>
+</div>
+
+<!-- MODAL: ลบรีวิว -->
+
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal" style="max-width:360px;">
+    <button class="close-btn" onclick="closeDeleteModal()">✕</button>
+    <div class="modal-title">🔒 ยืนยันการลบ</div>
+    <div class="modal-sub">ใส่รหัสผ่านเพื่อลบรีวิวนี้</div>
+    <label class="form-label">รหัสผ่าน</label>
+    <input class="form-input" id="delete-password" type="password" placeholder="ใส่รหัสผ่าน..." />
+    <div id="delete-error" class="error-msg" style="display:none;">❌ รหัสผ่านไม่ถูกต้อง</div>
+    <button class="submit-btn btn-red" onclick="confirmDelete()">🗑️ ลบรีวิว</button>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+
+<div class="modal-overlay" id="settings-modal">
+  <div class="modal">
+    <button class="close-btn" onclick="closeSettings()">✕</button>
+    <div class="modal-title">⚙️ ตั้งค่า LINE Notify</div>
+    <div class="modal-sub">ใส่ Token เพื่อรับแจ้งเตือนเข้า LINE ของคุณ</div>
+    <div class="token-box">
+      <strong>📌 วิธีรับ Token:</strong>
+      1. ไปที่ <a href="https://notify-bot.line.me" target="_blank" style="color:#16a34a;">notify-bot.line.me</a><br>
+      2. Login ด้วย LINE → กด "Generate token"<br>
+      3. ตั้งชื่อ → เลือก "Send to me" → Copy Token<br>
+      4. วาง Token ด้านล่างแล้วกด "บันทึก"
+      <div class="token-input-row">
+        <input type="text" id="line-token-input" placeholder="วาง Token ที่นี่..." />
+        <button class="save-token-btn" onclick="saveToken()">บันทึก ✓</button>
+      </div>
+      <div id="token-status" style="margin-top:8px; font-size:0.82rem;"></div>
+    </div>
+    <button class="submit-btn" onclick="closeSettings()">ปิด</button>
+  </div>
+</div>
+
+<button class="settings-btn" onclick="openSettings()" title="ตั้งค่า LINE Notify">⚙️</button>
+
+<section style="background:#fff; padding: 40px 20px; text-align:center; border-top: 1px solid var(--border);">
+  <p style="font-family:'Kanit',sans-serif; font-size:1.15rem; font-weight:700; color:var(--pink-dark); margin-bottom:20px;">📲 ติดต่อเราได้ที่</p>
+  <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap;">
+    <a href="https://www.facebook.com/nattaphum.uppati/" target="_blank"
+      style="display:flex; align-items:center; gap:10px; background: #1877f2; color:#fff;
+             text-decoration:none; padding:12px 28px; border-radius:50px;
+             font-family:'Kanit',sans-serif; font-size:1rem; font-weight:700;
+             box-shadow: 0 4px 16px rgba(24,119,242,0.35);
+             transition: transform 0.15s, box-shadow 0.15s;"
+      onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(24,119,242,0.45)'"
+      onmouseout="this.style.transform='';this.style.boxShadow='0 4px 16px rgba(24,119,242,0.35)'">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+      Facebook
+    </a>
+    <a href="https://www.instagram.com/naxxaphum_?igsh=MTdybDRmcGM0azlzbw%3D%3D&utm_source=qr" target="_blank"
+      style="display:flex; align-items:center; gap:10px;
+             background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4);
+             color:#fff; text-decoration:none; padding:12px 28px; border-radius:50px;
+             font-family:'Kanit',sans-serif; font-size:1rem; font-weight:700;
+             box-shadow: 0 4px 16px rgba(221,42,123,0.35);
+             transition: transform 0.15s, box-shadow 0.15s;"
+      onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(221,42,123,0.45)'"
+      onmouseout="this.style.transform='';this.style.boxShadow='0 4px 16px rgba(221,42,123,0.35)'">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      Instagram
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2024 <span>ร้านกู้ชีพงานค้าง</span> · ทำด้วยใจ ส่งทันเวลา 🌸</p>
+</footer>
+
+<script>
+  const ADMIN_PASSWORD = '141053';
+  let selectedJob = '', lineToken = localStorage.getItem('lineToken') || '';
+  let selectedStars = 5, deleteTargetId = null;
+
+  const defaultReviews = [
+    { id: 1, name: 'น้องมิน', role: 'นักศึกษาปี 2', stars: 5, text: 'ส่งงานทันเดดไลน์แน่นอน ช่วยแก้ร. มส. ให้หมดเลย ขอบคุณมากนะคะ!', emoji: '🧑‍🎓' },
+    { id: 2, name: 'พี่โอ๊ต', role: 'นักศึกษาปี 4', stars: 5, text: 'สไลด์ Canva สวยมากเลยครับ ทำเสร็จไวด้วย ประหยัดเวลาได้เยอะ', emoji: '👨‍💼' },
+    { id: 3, name: 'พี่ฝ้าย', role: 'นักศึกษาปี 3', stars: 4, text: 'ใบงาน Canva ออกมาดูดีมากค่ะ ราคาเหมาะสม แนะนำเลย!', emoji: '👩‍🏫' },
+    { id: 4, name: 'น้องเฟิร์น', role: 'นักศึกษาปี 1', stars: 5, text: 'แก้ข้อสอบได้ครบทุกข้อ เจ้าของร้านใจดี ตอบไวมาก ประทับใจมากๆ', emoji: '🧑‍💻' },
+  ];
+
+  function loadReviews() { const s = localStorage.getItem('reviews'); return s ? JSON.parse(s) : defaultReviews; }
+  function saveReviews(r) { localStorage.setItem('reviews', JSON.stringify(r)); }
+
+  function renderReviews() {
+    const reviews = loadReviews();
+    const c = document.getElementById('reviews-container');
+    if (!reviews.length) {
+      c.innerHTML = '<div class="empty-reviews"><div class="icon">💬</div><p>ยังไม่มีรีวิว เป็นคนแรกได้เลย!</p></div>';
+      return;
+    }
+    c.innerHTML = reviews.map(r => `
+      <div class="review-card" id="review-${r.id}">
+        <button class="delete-review-btn" onclick="askDelete(${r.id})">🗑️ ลบ</button>
+        <div class="reviewer-info">
+          <div class="reviewer-avatar">${r.emoji||'😊'}</div>
+          <div><div class="reviewer-name">${r.name}</div><div class="reviewer-role">${r.role}</div></div>
+        </div>
+        <div class="stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+        <div class="review-text">${r.text}</div>
+      </div>`).join('');
+  }
+
+  function openReviewModal() {
+    document.getElementById('review-modal').classList.add('active');
+    ['rev-name','rev-role','rev-text'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('rev-error').style.display = 'none';
+    selectedStars = 5; updateStars();
+  }
+  function closeReviewModal() { document.getElementById('review-modal').classList.remove('active'); }
+
+  function setStars(n) { selectedStars = n; updateStars(); }
+  function updateStars() {
+    document.querySelectorAll('.star-btn').forEach((b,i) => b.classList.toggle('active', i < selectedStars));
+  }
+
+  function submitReview() {
+    const name = document.getElementById('rev-name').value.trim();
+    const role = document.getElementById('rev-role').value.trim();
+    const text = document.getElementById('rev-text').value.trim();
+    if (!name || !text) { document.getElementById('rev-error').style.display = 'block'; return; }
+    const emojis = ['😊','🙂','👍','🌟','💪','🎉','✨','🥰'];
+    const reviews = loadReviews();
+    reviews.push({ id: Date.now(), name, role: role||'ลูกค้า', stars: selectedStars, text, emoji: emojis[Math.floor(Math.random()*emojis.length)] });
+    saveReviews(reviews); renderReviews(); closeReviewModal();
+  }
+
+  function askDelete(id) {
+    deleteTargetId = id;
+    document.getElementById('delete-password').value = '';
+    document.getElementById('delete-error').style.display = 'none';
+    document.getElementById('delete-modal').classList.add('active');
+  }
+  function closeDeleteModal() { document.getElementById('delete-modal').classList.remove('active'); deleteTargetId = null; }
+  function confirmDelete() {
+    if (document.getElementById('delete-password').value !== ADMIN_PASSWORD) {
+      document.getElementById('delete-error').style.display = 'block';
+      document.getElementById('delete-password').value = ''; return;
+    }
+    saveReviews(loadReviews().filter(r => r.id !== deleteTargetId));
+    renderReviews(); closeDeleteModal();
+  }
+
+  function openModal() {
+    document.getElementById('modal').classList.add('active');
+    document.getElementById('step1').style.display = 'block';
+    document.getElementById('step-success').style.display = 'none';
+    selectedJob = '';
+    document.querySelectorAll('.job-option').forEach(o => o.classList.remove('selected'));
+    document.getElementById('firstName').value = '';
+    document.getElementById('lastName').value = '';
+    document.getElementById('job-error').style.display = 'none';
+  }
+  function closeModal() { document.getElementById('modal').classList.remove('active'); }
+
+  function selectJob(el, job) {
+    document.querySelectorAll('.job-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected'); selectedJob = job;
+    document.getElementById('job-error').style.display = 'none';
+  }
+
+  async function submitJob() {
+    const first = document.getElementById('firstName').value.trim();
+    const last = document.getElementById('lastName').value.trim();
+    const btn = document.getElementById('submit-btn');
+    if (!first || !last) { alert('⚠️ กรุณากรอกชื่อ-นามสกุล'); return; }
+    if (!selectedJob) { document.getElementById('job-error').style.display = 'block'; return; }
+    const message = `🌸 มีงานจ้างใหม่!\n👤 ชื่อ: ${first} ${last}\n📋 งาน: ${selectedJob}\n⏰ เวลา: ${new Date().toLocaleString('th-TH')}`;
+    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>กำลังส่ง...';
+    if (lineToken) {
+      try {
+        const res = await fetch('https://corsproxy.io/?https://notify-api.line.me/api/notify', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + lineToken, 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: 'message=' + encodeURIComponent(message)
+        });
+        showSuccess(first, last, selectedJob, res.ok, res.ok ? null : 'Token อาจไม่ถูกต้อง');
+      } catch(e) { showSuccess(first, last, selectedJob, false, 'ไม่สามารถเชื่อมต่อ LINE ได้'); }
+    } else { showSuccess(first, last, selectedJob, false, 'ยังไม่ได้ตั้งค่า LINE Token (กดปุ่ม ⚙️ มุมขวาล่าง)'); }
+    btn.disabled = false; btn.innerHTML = '✅ ส่งจ้างงาน';
+  }
+
+  function showSuccess(first, last, job, sent, note) {
+    document.getElementById('step1').style.display = 'none';
+    document.getElementById('step-success').style.display = 'block';
+    document.getElementById('success-msg').innerText = sent
+      ? `คุณ ${first} ${last}\nส่งคำสั่งจ้างงาน "${job}" เรียบร้อยแล้ว\nเจ้าของร้านได้รับแจ้งเตือนใน LINE แล้ว! 📲`
+      : `คุณ ${first} ${last}\nส่งคำสั่งจ้างงาน "${job}" แล้ว\n⚠️ หมายเหตุ: ${note}`;
+  }
+
+  function openSettings() {
+    document.getElementById('settings-modal').classList.add('active');
+    document.getElementById('line-token-input').value = lineToken;
+    const s = document.getElementById('token-status');
+    s.innerHTML = lineToken ? '✅ Token บันทึกแล้ว' : '⚠️ ยังไม่มี Token';
+    s.style.color = lineToken ? '#16a34a' : '#f59e0b';
+  }
+  function closeSettings() { document.getElementById('settings-modal').classList.remove('active'); }
+  function saveToken() {
+    const val = document.getElementById('line-token-input').value.trim();
+    const s = document.getElementById('token-status');
+    if (!val) { s.innerHTML = '❌ กรุณาใส่ Token'; s.style.color = '#ef4444'; return; }
+    lineToken = val; localStorage.setItem('lineToken', val);
+    s.innerHTML = '✅ บันทึกสำเร็จ!'; s.style.color = '#16a34a';
+  }
+
+  ['modal','review-modal','delete-modal','settings-modal'].forEach(id => {
+    document.getElementById(id).addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
+  });
+
+  updateStars();
+  renderReviews();
+</script>
+
+</body>
+</html>
