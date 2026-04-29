@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work Rescuer - กู้ชีพงานค้าง</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff6b6b;
+            --secondary: #4ecdc4;
+            --dark: #2d3436;
+            --light: #f9f9f9;
+        }
+        * { box-sizing: border-box; font-family: 'Kanit', sans-serif; }
+        body { background-color: #f0f2f5; margin: 0; padding: 20px; color: var(--dark); }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: var(--primary); margin-bottom: 5px; }
+        p.subtitle { text-align: center; color: #666; margin-bottom: 30px; }
+
+        /* Counter Section */
+        .counter-box { background: var(--primary); color: white; text-align: center; padding: 20px; border-radius: 15px; margin-bottom: 25px; }
+        .counter-num { font-size: 3rem; font-weight: 700; display: block; }
+
+        /* Form Section */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; }
+        input, select { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; font-size: 1rem; outline: none; }
+        input:focus { border-color: var(--secondary); }
+        button { width: 100%; padding: 15px; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-order { background: var(--secondary); color: white; }
+        .btn-order:hover { background: #3dbdb4; }
+        .btn-search { background: var(--dark); color: white; }
+
+        /* Admin Icon */
+        .admin-trigger { text-align: right; margin-top: 20px; cursor: pointer; font-size: 1.2rem; opacity: 0.5; }
+
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: white; padding: 25px; border-radius: 20px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; }
+        .order-item { border-bottom: 1px solid #eee; padding: 10px 0; display: flex; justify-content: space-between; align-items: center; }
+        .status-badge { padding: 4px 8px; border-radius: 5px; font-size: 0.8rem; }
+        .pending { background: #ffeaa7; color: #d6a316; }
+        .done { background: #55efc4; color: #00b894; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Work Rescuer 🆘</h1>
+    <p class="subtitle">บริการกู้ชีพงานค้าง รวดเร็ว ทันใจ</p>
+
+    <div class="counter-box">
+        <span class="counter-num" id="current-count-display">0</span>
+        <span>จำนวนงานที่ทำสำเร็จแล้ว</span>
+    </div>
+
+    <div class="form-group">
+        <label>ชื่อของคุณ</label>
+        <input type="text" id="order-name" placeholder="ระบุชื่อเพื่อใช้เช็คสถานะ">
+    </div>
+    <div class="form-group">
+        <label>งานที่ให้ทำ</label>
+        <input type="text" id="order-job" placeholder="เช่น ทำสไลด์ Canva, แก้เกรด">
+    </div>
+    <button class="btn-order" onclick="sendOrder()">ส่งงานเข้ากู้ชีพ</button>
+
+    <hr style="margin: 30px 0; border: 0; border-top: 1px dashed #ccc;">
+
+    <div class="form-group">
+        <label>🔎 เช็คสถานะงาน</label>
+        <input type="text" id="search-input" placeholder="ใส่ชื่อที่ใช้สั่งงาน">
+    </div>
+    <button class="btn-search" onclick="checkStatus()">ตรวจสอบสถานะ</button>
+
+    <div class="admin-trigger" onclick="openAdmin()">⚙️ สำหรับแอดมิน</div>
+</div>
+
+<div id="admin-modal" class="modal">
+    <div class="modal-content">
+        <h2>แผงควบคุมแอดมิน</h2>
+        <div id="admin-order-list">กำลังโหลดข้อมูล...</div>
+        <button onclick="closeAdmin()" style="background:#eee; color:#333; margin-top:20px;">ปิดหน้าต่าง</button>
+    </div>
+</div>
+
+<script>
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbz_2rFs1UCbkEeWR77ePJefDOxJLufi7aPw53jm_lGh5aBJx5QavmEySAbv9o1lHcA4/exec';
+    const ADMIN_PASSWORD = '300454';
+
+    // 1. ดึงจำนวนงานที่สำเร็จแล้ว
+    async function updateCounter() {
+        try {
+            const res = await fetch(`${SHEET_URL}?action=getCount`);
+            const data = await res.json();
+            if (data.ok) document.getElementById('current-count-display').innerText = data.count;
+        } catch (e) { console.error(e); }
+    }
+
+    // 2. ส่งงานใหม่
+    async function sendOrder() {
+        const name = document.getElementById('order-name').value;
+        const job = document.getElementById('order-job').value;
+        if (!name || !job) return alert('กรุณากรอกข้อมูลให้ครบครับ');
+
+        const btn = document.querySelector('.btn-order');
+        btn.innerText = 'กำลังส่งข้อมูล...';
+        btn.disabled = true;
+
+        try {
+            await fetch(SHEET_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    action: 'addOrder',
+                    id: Date.now(),
+                    name: name,
+                    job: job,
+                    pay: 'รอกำหนดราคา',
+                    time: new Date().toLocaleString('th-TH')
+                })
+            });
+            alert('ส่งงานเรียบร้อย! รอแอดมินรับงานนะครับ');
+            document.getElementById('order-name').value = '';
+            document.getElementById('order-job').value = '';
+        } catch (e) { alert('เกิดข้อผิดพลาด'); }
+        btn.innerText = 'ส่งงานเข้ากู้ชีพ';
+        btn.disabled = false;
+    }
+
+    // 3. เช็คสถานะ (สำหรับลูกค้า)
+    async function checkStatus() {
+        const searchName = document.getElementById('search-input').value;
+        if (!searchName) return alert('ใส่ชื่อก่อนครับ');
+
+        try {
+            const res = await fetch(`${SHEET_URL}?action=getOrders`);
+            const data = await res.json();
+            const myOrder = data.data.find(o => o.name === searchName);
+            if (myOrder) {
+                alert(`สวัสดีคุณ ${myOrder.name}\nงาน: ${myOrder.job}\nสถานะ: ${myOrder.status}`);
+            } else {
+                alert('ไม่พบข้อมูลชื่อนี้ครับ');
+            }
+        } catch (e) { alert('โหลดข้อมูลไม่สำเร็จ'); }
+    }
+
+    // 4. ส่วนของแอดมิน
+    function openAdmin() {
+        const pass = prompt('กรุณาใส่รหัสผ่านแอดมิน:');
+        if (pass === ADMIN_PASSWORD) {
+            document.getElementById('admin-modal').style.display = 'flex';
+            loadAdminData();
+        } else {
+            alert('รหัสผ่านไม่ถูกต้อง!');
+        }
+    }
+
+    function closeAdmin() {
+        document.getElementById('admin-modal').style.display = 'none';
+        updateCounter();
+    }
+
+    async function loadAdminData() {
+        const list = document.getElementById('admin-order-list');
+        list.innerHTML = 'กำลังโหลดรายการ...';
+        try {
+            const res = await fetch(`${SHEET_URL}?action=getOrders`);
+            const data = await res.json();
+            list.innerHTML = '';
+            data.data.reverse().forEach(order => {
+                const item = document.createElement('div');
+                item.className = 'order-item';
+                item.innerHTML = `
+                    <div>
+                        <strong>${order.name}</strong><br>
+                        <small>${order.job}</small>
+                    </div>
+                    <select onchange="updateStatus('${order.id}', this.value)">
+                        <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>รอ</option>
+                        <option value="done" ${order.status === 'done' ? 'selected' : ''}>เสร็จ</option>
+                    </select>
+                `;
+                list.appendChild(item);
+            });
+        } catch (e) { list.innerHTML = 'โหลดข้อมูลล้มเหลว'; }
+    }
+
+    async function updateStatus(id, newStatus) {
+        try {
+            await fetch(SHEET_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'updateStatus', id: id, status: newStatus })
+            });
+            alert('อัปเดตสถานะแล้ว');
+        } catch (e) { alert('อัปเดตไม่สำเร็จ'); }
+    }
+
+    // โหลดจำนวนเมื่อเปิดหน้าเว็บ
+    updateCounter();
+</script>
+
+</body>
+</html>
