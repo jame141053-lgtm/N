@@ -6,11 +6,12 @@
     <title>ร้านกู้ชีพงานค้าง</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* --- โค้ดส่วนตกแต่งเดิมของคุณ (ผมคงไว้ทั้งหมดตามรูป) --- */
+        /* --- ส่วนตกแต่งเดิมที่คุณทำไว้ (คงไว้ทั้งหมด) --- */
         :root {
             --pink-main: #ff4d8d;
             --pink-soft: #fff0f5;
             --green-btn: #2ecc71;
+            --dark: #2d3436;
         }
         * { box-sizing: border-box; font-family: 'Kanit', sans-serif; }
         body { 
@@ -30,50 +31,80 @@
             background: #40d391; color: white; border: none;
             padding: 15px 40px; border-radius: 30px; font-size: 1.1rem;
             cursor: pointer; box-shadow: 0 4px 15px rgba(64,211,145,0.3);
+            transition: 0.3s;
         }
+        .start-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(64,211,145,0.4); }
 
         .trust-section {
             background: var(--pink-main); color: white;
             padding: 20px; border-radius: 50px; margin: 40px auto;
             max-width: 300px; display: flex; align-items: center; justify-content: center; gap: 10px;
+            box-shadow: 0 10px 20px rgba(255, 77, 141, 0.2);
         }
-        .counter-num { font-size: 1.5rem; font-weight: 700; }
+        .counter-num { font-size: 1.8rem; font-weight: 700; }
 
+        /* ส่วนราคาที่สวยงามของคุณ */
         .price-card-container {
-            display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 50px;
+            display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 40px;
         }
         .price-card {
-            background: white; padding: 20px; border-radius: 20px;
+            background: white; padding: 25px; border-radius: 25px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 280px;
-            border-top: 5px solid var(--pink-main);
+            border-top: 6px solid var(--pink-main);
+            text-align: left;
+        }
+        .price-card h3 { margin-top: 0; color: #333; }
+        .price-card p { margin: 10px 0; color: #555; display: flex; justify-content: space-between; }
+        .price-val { color: var(--pink-main); font-weight: 600; }
+
+        /* ส่วนฟอร์มและสถานะ */
+        .action-box {
+            max-width: 450px; margin: 60px auto; background: white; 
+            padding: 30px; border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            text-align: left;
+        }
+        input { 
+            width: 100%; padding: 12px; margin: 10px 0 20px; 
+            border-radius: 12px; border: 2px solid #f0f0f0; outline: none;
+            background: #fff !important;
+        }
+        input:focus { border-color: var(--secondary); }
+        .btn {
+            width: 100%; padding: 15px; border-radius: 12px; border: none;
+            font-weight: 600; cursor: pointer; transition: 0.3s;
         }
 
-        /* ส่วนหน้าต่างตั้งค่า (Modal) */
+        /* ส่วน Modal แอดมิน */
         .modal { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; 
+            background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; 
+            backdrop-filter: blur(5px);
         }
         .modal-content { 
             background: white; padding: 30px; border-radius: 25px; width: 90%; max-width: 450px; 
         }
 
-        /* ปุ่มแอดมินมุมขวา */
-        .admin-btn {
-            position: absolute; top: 20px; right: 20px; background: #eee;
-            padding: 5px 15px; border-radius: 15px; cursor: pointer; font-size: 0.8rem;
+        /* ปุ่มฟันเฟืองแอดมิน */
+        .admin-trigger {
+            position: fixed; top: 20px; right: 20px; background: white;
+            padding: 8px 15px; border-radius: 20px; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); font-size: 0.85rem;
         }
+
+        /* ส่วนล่างสุด (Footer) */
+        .footer { margin-top: 60px; padding: 40px; color: #aaa; font-size: 0.85rem; }
     </style>
 </head>
 <body>
 
-    <div class="admin-btn" onclick="openAdmin()">⚙️ ตั้งค่า</div>
+    <div class="admin-trigger" onclick="openAdmin()">⚙️ ตั้งค่า</div>
 
     <center>
         <div class="header-badge">🌸 บริการด่วน · รับงานทุกชั้น</div>
         <h1 class="main-title">ร้าน<span>กู้ชีพงานค้าง</span></h1>
         <p class="subtitle">ส่งงานช้า? ค้างมานาน? เราช่วยได้ · รวดเร็ว · มืออาชีพ</p>
         
-        <button class="start-btn" onclick="scrollToOrder()">🚀 เริ่มจ้างงาน</button>
+        <button class="start-btn" onclick="document.getElementById('order-form').scrollIntoView({behavior:'smooth'})">🚀 เริ่มจ้างงาน</button>
 
         <div class="trust-section">
             <span class="counter-num" id="counter-display">0</span>
@@ -86,76 +117,76 @@
         <div class="price-card-container">
             <div class="price-card">
                 <h3>📝 งานแก้ข้อสอบ</h3>
-                <hr>
-                <p>จดน้อย: 7฿/หน้า</p>
-                <p>จดเยอะ: 12฿/หน้า</p>
+                <p>จดน้อย <span class="price-val">7฿/หน้า</span></p>
+                <p>จดเยอะ <span class="price-val">12฿/หน้า</span></p>
             </div>
             <div class="price-card">
                 <h3>🔴 งานแก้ 0 ร มส</h3>
-                <hr>
-                <p>จดน้อย: 9฿/หน้า</p>
-                <p>จดเยอะ: 14฿/หน้า</p>
+                <p>จดน้อย <span class="price-val">9฿/หน้า</span></p>
+                <p>จดเยอะ <span class="price-val">14฿/หน้า</span></p>
             </div>
         </div>
 
-        <div id="order-section" style="margin-top:80px; max-width:400px; text-align:left; background:white; padding:30px; border-radius:25px;">
-            <h3 style="text-align:center">🚀 สั่งงานตรงนี้</h3>
-            <label>ชื่อของคุณ:</label>
-            <input type="text" id="order-name" style="width:100%; padding:10px; margin:10px 0; border-radius:10px; border:1px solid #ddd;">
-            <label>รายละเอียดงาน:</label>
-            <input type="text" id="order-job" style="width:100%; padding:10px; margin:10px 0; border-radius:10px; border:1px solid #ddd;">
-            <button onclick="sendOrder()" style="width:100%; background:var(--pink-main); color:white; border:none; padding:15px; border-radius:10px; cursor:pointer;">ส่งข้อมูลงาน</button>
+        <div class="action-box" id="order-form">
+            <h3 style="text-align:center; margin-top:0;">🚀 สั่งงานเข้ากู้ชีพ</h3>
+            <label>ชื่อของคุณ</label>
+            <input type="text" id="order-name" placeholder="ชื่อที่ใช้เช็คสถานะ">
+            <label>งานที่ให้ทำ</label>
+            <input type="text" id="order-job" placeholder="เช่น สรุปบทความ, แก้เกรด">
+            <button class="btn" style="background:var(--green-btn); color:white;" onclick="sendOrder()">ส่งข้อมูลงาน ✨</button>
             
-            <hr style="margin:20px 0; border:0; border-top:1px dashed #ccc;">
+            <div style="margin: 35px 0; border-top: 2px dashed #f0f0f0;"></div>
             
-            <label>🔎 เช็คสถานะงาน:</label>
-            <input type="text" id="search-input" placeholder="พิมพ์ชื่อเพื่อเช็คงาน" style="width:100%; padding:10px; margin:10px 0; border-radius:10px; border:1px solid #ddd;">
-            <button onclick="checkStatus()" style="width:100%; background:#333; color:white; border:none; padding:15px; border-radius:10px; cursor:pointer;">ตรวจสอบสถานะ</button>
+            <h3 style="text-align:center;">🔎 เช็คสถานะงาน</h3>
+            <input type="text" id="search-input" placeholder="พิมพ์ชื่อที่ใช้สั่งงาน...">
+            <button class="btn" style="background:var(--dark); color:white;" onclick="checkStatus()">ตรวจสอบสถานะ</button>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 Work Rescuer - All Rights Reserved</p>
+            <p>ติดต่อสอบถามเพิ่มเติมได้ผ่านช่องทางแชท 🌸</p>
         </div>
     </center>
 
     <div id="admin-modal" class="modal">
         <div class="modal-content">
-            <h3>จัดการสถานะลูกค้า</h3>
-            <div id="admin-list" style="max-height:300px; overflow-y:auto;"></div>
-            <button onclick="closeAdmin()" style="margin-top:20px; width:100%; padding:10px; border-radius:10px; border:none; background:#eee;">ปิด</button>
+            <h3 style="margin-top:0">จัดการสถานะลูกค้า</h3>
+            <div id="admin-list" style="max-height:350px; overflow-y:auto; border:1px solid #f9f9f9; padding:10px; border-radius:15px;"></div>
+            <button onclick="document.getElementById('admin-modal').style.display='none'" style="margin-top:20px; width:100%; padding:12px; border-radius:12px; border:none; background:#eee; cursor:pointer;">ปิดหน้าต่าง</button>
         </div>
     </div>
 
 <script>
-    // --- ปรับปรุง Logic เฉพาะจุดตามที่คุณต้องการ ---
     const SHEET_URL = 'https://script.google.com/macros/s/AKfycbz_2rFs1UCbkEeWR77ePJefDOxJLufi7aPw53jm_lGh5aBJx5QavmEySAbv9o1lHcA4/exec';
     const ADMIN_PASSWORD = '300454';
 
-    // 1. แก้ไขให้นับตามจริงจาก Google Sheets
-    async function fetchAndUpdateCounter() {
+    // 1. ดึงจำนวนงานที่สำเร็จจาก Google Sheets
+    async function updateCounter() {
         try {
-            const response = await fetch(`${SHEET_URL}?action=getCount`);
-            const result = await response.json();
-            if (result.ok) {
-                document.getElementById('counter-display').textContent = result.count;
-            }
-        } catch (e) { console.error('Counter error'); }
+            const res = await fetch(`${SHEET_URL}?action=getCount`);
+            const data = await res.json();
+            if (data.ok) document.getElementById('counter-display').textContent = data.count;
+        } catch (e) { console.log('Counter Error'); }
     }
 
-    // 2. ฟังก์ชันส่งงาน (แบบไม่เปลี่ยนหน้าตา)
+    // 2. ฟังก์ชันส่งงาน
     async function sendOrder() {
-        const name = document.getElementById('order-name').value;
-        const job = document.getElementById('order-job').value;
-        if(!name || !job) return alert('กรอกข้อมูลก่อนครับ');
+        const name = document.getElementById('order-name').value.trim();
+        const job = document.getElementById('order-job').value.trim();
+        if(!name || !job) return alert('กรุณากรอกข้อมูลให้ครบครับ');
         
         try {
             await fetch(SHEET_URL, {
                 method: 'POST',
-                body: JSON.stringify({ action: 'addOrder', id: Date.now(), name: name, job: job, pay: '-', time: new Date().toLocaleString() })
+                body: JSON.stringify({ action: 'addOrder', id: Date.now(), name: name, job: job, pay: '-', time: new Date().toLocaleString('th-TH') })
             });
-            alert('ส่งงานเรียบร้อย!');
+            alert('ส่งงานเรียบร้อยแล้ว! ขอบคุณที่ใช้บริการครับ');
             document.getElementById('order-name').value = '';
             document.getElementById('order-job').value = '';
-        } catch (e) { alert('ผิดพลาด'); }
+        } catch (e) { alert('เกิดข้อผิดพลาด'); }
     }
 
-    // 3. ฟังก์ชันเช็คสถานะ (แก้ปัญหาหาไม่เจอ)
+    // 3. ฟังก์ชันเช็คสถานะ
     async function checkStatus() {
         const inputName = document.getElementById('search-input').value.trim();
         if(!inputName) return alert('ใส่ชื่อก่อนครับ');
@@ -165,55 +196,49 @@
             const data = await res.json();
             const myOrder = data.data.find(o => o.name === inputName);
             if(myOrder) {
-                alert(`คุณ ${myOrder.name}\nงาน: ${myOrder.job}\nสถานะ: ${myOrder.status}`);
+                const s = myOrder.status === 'pending' ? '⏳ รอดำเนินการ' : '✅ เสร็จแล้ว!';
+                alert(`สวัสดีคุณ ${myOrder.name}\nงาน: ${myOrder.job}\nสถานะ: ${s}`);
             } else {
-                alert('ไม่พบชื่อนี้ครับ ตรวจสอบตัวสะกดอีกทีนะ');
+                alert('ไม่พบชื่อนี้ในระบบครับ');
             }
-        } catch (e) { alert('เชื่อมต่อล้มเหลว'); }
+        } catch (e) { alert('โหลดข้อมูลไม่สำเร็จ'); }
     }
 
-    // 4. ระบบแอดมิน (เปลี่ยนสถานะได้ 24 ชม.)
+    // 4. แอดมิน
     function openAdmin() {
-        const p = prompt('รหัสผ่าน:');
-        if(p === ADMIN_PASSWORD) {
+        if(prompt('รหัสผ่าน:') === ADMIN_PASSWORD) {
             document.getElementById('admin-modal').style.display = 'flex';
-            loadAdminOrders();
-        }
+            loadAdminData();
+        } else { alert('รหัสผิด!'); }
     }
 
-    async function loadAdminOrders() {
-        const listDiv = document.getElementById('admin-list');
-        listDiv.innerHTML = 'กำลังโหลด...';
+    async function loadAdminData() {
+        const list = document.getElementById('admin-list');
+        list.innerHTML = 'กำลังโหลดรายการ...';
         const res = await fetch(`${SHEET_URL}?action=getOrders`);
         const data = await res.json();
-        listDiv.innerHTML = '';
-        data.data.reverse().forEach(order => {
-            const item = document.createElement('div');
-            item.style = 'border-bottom:1px solid #eee; padding:10px; display:flex; justify-content:space-between;';
-            item.innerHTML = `
-                <span>${order.name}</span>
-                <select onchange="updateStatus('${order.id}', this.value)">
-                    <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>รอ</option>
-                    <option value="done" ${order.status === 'done' ? 'selected' : ''}>เสร็จ</option>
+        list.innerHTML = '';
+        data.data.reverse().forEach(o => {
+            const div = document.createElement('div');
+            div.style = 'border-bottom:1px solid #eee; padding:10px; display:flex; justify-content:space-between; align-items:center;';
+            div.innerHTML = `
+                <div style="font-size:0.85rem"><strong>${o.name}</strong><br><small>${o.job}</small></div>
+                <select onchange="updateStatus('${o.id}', this.value)" style="padding:5px; border-radius:5px;">
+                    <option value="pending" ${o.status === 'pending' ? 'selected' : ''}>รอ</option>
+                    <option value="done" ${o.status === 'done' ? 'selected' : ''}>เสร็จ</option>
                 </select>
             `;
-            listDiv.appendChild(item);
+            list.appendChild(div);
         });
     }
 
     async function updateStatus(id, stat) {
-        await fetch(SHEET_URL, {
-            method: 'POST',
-            body: JSON.stringify({ action: 'updateStatus', id: id, status: stat })
-        });
-        fetchAndUpdateCounter(); // อัปเดตตัวเลขหน้าเว็บทันทีเมื่อกด 'เสร็จ'
+        await fetch(SHEET_URL, { method: 'POST', body: JSON.stringify({ action: 'updateStatus', id: id, status: stat }) });
+        updateCounter();
     }
 
-    function closeAdmin() { document.getElementById('admin-modal').style.display = 'none'; }
-    function scrollToOrder() { document.getElementById('order-section').scrollIntoView({behavior: 'smooth'}); }
-
-    // เริ่มทำงานเมื่อเปิดเว็บ
-    fetchAndUpdateCounter();
+    // เริ่มทำงาน
+    updateCounter();
 </script>
 </body>
 </html>
