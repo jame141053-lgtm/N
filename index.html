@@ -8,70 +8,73 @@
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-pink: #ff4d6d;
-            --secondary-pink: #ff85a1;
-            --dark-pink: #c9184a;
-            --bg-light: #fff0f3;
+            --main-pink: #ff4d6d;
+            --soft-pink: #fff0f3;
+            --gradient-text: linear-gradient(45deg, #ff4d6d, #ff85a1);
         }
 
         body {
             font-family: 'Kanit', sans-serif;
-            background-color: var(--bg-light);
+            background-color: #fefefe;
             margin: 0;
             color: #333;
         }
 
-        /* --- Header Section --- */
-        .header {
+        /* --- Header ดีไซน์เดิม (รูปที่ 2) --- */
+        .header-container {
             text-align: center;
-            padding: 50px 20px;
-            background: white;
+            padding: 40px 20px;
+            background: var(--soft-pink);
+            position: relative;
         }
 
-        .logo-text {
-            font-size: 3rem;
-            font-weight: 800;
-            margin: 0;
-            background: linear-gradient(45deg, var(--dark-pink), var(--primary-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .admin-btn {
+        .admin-setting-btn {
             position: absolute;
             top: 20px;
             right: 20px;
-            background: #eee;
+            background: white;
             border: none;
-            padding: 10px;
-            border-radius: 50%;
+            padding: 8px 15px;
+            border-radius: 10px;
             cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            color: #ff4d6d;
         }
 
-        /* --- Service Prices (ปรับปรุงรายการ) --- */
-        .price-section {
+        .logo-title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0;
+        }
+
+        .logo-highlight { color: #ff4d6d; }
+
+        /* --- ราคาบริการ (ข้อ 3: เพิ่มงานให้ครบ) --- */
+        .price-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
-            padding: 40px;
+            padding: 20px;
             max-width: 1200px;
             margin: 0 auto;
         }
 
         .price-card {
             background: white;
-            padding: 20px;
             border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            border-bottom: 5px solid var(--primary-pink);
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+            position: relative;
         }
 
-        /* --- Job Form (ปรับปรุงตามข้อ 5) --- */
+        /* --- Modal ฟอร์มจ้างงาน (ข้อ 5: ปรับหัวข้อใหญ่เล่นสี) --- */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.4);
             justify-content: center; align-items: center;
             z-index: 1000;
         }
@@ -81,45 +84,45 @@
             padding: 30px;
             border-radius: 25px;
             width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
+            max-width: 450px;
+            max-height: 90vh;
             overflow-y: auto;
         }
 
-        .form-header {
-            font-size: 2rem;
-            font-weight: 700;
+        .form-header-title {
+            font-size: 2.2rem; /* ใหญ่กว่าเดิม */
+            font-weight: bold;
             text-align: center;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, var(--dark-pink), var(--primary-pink));
+            background: var(--gradient-text);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
         }
 
-        .job-grid {
+        /* --- ปุ่มเลือกงาน (ข้อ 5: เพิ่ม 5 งานพร้อม Emoji) --- */
+        .job-selector {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            margin-bottom: 20px;
         }
 
-        .job-option {
-            padding: 15px;
-            border: 2px solid #eee;
+        .job-btn {
+            border: 1px solid #ddd;
+            padding: 12px;
             border-radius: 12px;
-            text-align: center;
+            background: white;
             cursor: pointer;
             transition: 0.3s;
         }
 
-        .job-option.active {
-            border-color: var(--primary-pink);
-            background: var(--bg-light);
+        .job-btn.active {
+            border: 2px solid var(--main-pink);
+            background: var(--soft-pink);
         }
 
-        /* --- Review Section (ปรับตามข้อ 4) --- */
-        .review-container {
-            padding: 40px 20px;
+        /* --- รีวิวลูกค้า (ข้อ 4: ใหญ่ขึ้น มีปุ่ม มีรูปโปรไฟล์) --- */
+        .review-section {
+            padding: 30px 20px;
             max-width: 800px;
             margin: 0 auto;
         }
@@ -128,55 +131,51 @@
             background: white;
             padding: 25px;
             border-radius: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 15px;
-            font-size: 1.1rem; /* ใหญ่ขึ้น */
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            font-size: 1.2rem; /* ใหญ่ขึ้น */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
         }
 
-        .profile-img {
-            width: 60px;
-            height: 60px;
+        .review-pfp {
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            background: #eee;
+            background: #f0f0f0;
             display: flex;
-            justify-content: center;
             align-items: center;
-            font-size: 30px;
+            justify-content: center;
+            font-size: 24px;
         }
 
-        /* --- Footer (ปรับตามข้อ 6) --- */
-        .footer {
-            background: #fff;
-            padding: 30px;
+        /* --- Footer (ข้อ 6: เพิ่มโลโก้ FB/IG) --- */
+        .footer-contact {
             text-align: center;
-            border-top: 1px solid #eee;
+            padding: 40px;
+            background: white;
         }
 
-        .social-link {
+        .social-btn {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             padding: 10px 20px;
             background: #f8f8f8;
-            border-radius: 15px;
+            border-radius: 20px;
             text-decoration: none;
             color: #333;
             margin: 5px;
-            transition: 0.3s;
         }
 
-        .social-link:hover { background: var(--bg-light); }
-        .social-link i { font-size: 24px; }
         .fa-facebook { color: #1877F2; }
         .fa-instagram { color: #E4405F; }
 
-        /* --- Admin Settings Popup --- */
-        .admin-menu-item {
+        /* --- Admin Menu Items --- */
+        .admin-item {
             padding: 15px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #f0f0f0;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
@@ -185,148 +184,87 @@
 </head>
 <body>
 
-    <button class="admin-btn" onclick="openAdminLogin()"><i class="fas fa-cog"></i></button>
-
-    <div class="header">
-        <h1 class="logo-text">ร้านกู้ชีพงานค้าง</h1>
+    <div class="header-container">
+        <button class="admin-setting-btn" onclick="checkAdminPass()"><i class="fas fa-cog"></i> ตั้งค่า</button>
+        <h1 class="logo-title">ร้าน<span class="logo-highlight">กู้ชีพ</span>งานค้าง</h1>
         <p>ส่งงานช้า? ค้างมานาน? เราช่วยได้ • รวดเร็ว • มืออาชีพ</p>
-        <button class="btn-main" onclick="openOrderForm()" style="background: #00d084; color: white; border: none; padding: 15px 30px; border-radius: 30px; font-size: 1.2rem; cursor: pointer;">🚀 เริ่มจ้างงาน</button>
+        <button onclick="document.getElementById('jobModal').style.display='flex'" style="background:#00d084; color:white; border:none; padding:12px 25px; border-radius:25px; cursor:pointer;">🚀 เริ่มจ้างงาน</button>
     </div>
 
-    <div class="price-section" id="priceDisplay">
-        </div>
-
-    <div class="review-container">
-        <h3>💬 รีวิวจากลูกค้า</h3>
-        <div id="reviewList"></div>
-        <button onclick="openReviewForm()" style="width: 100%; padding: 10px; border-radius: 10px; border: 1px dashed var(--primary-pink); background: none; color: var(--primary-pink); cursor: pointer;">+ เขียนรีวิวของคุณ</button>
+    <div class="price-grid">
+        <div class="price-card"><h4>📝 งานแก้ข้อสอบ</h4><p>จดน้อย 7฿/หน้า | จดเยอะ 12฿/หน้า</p></div>
+        <div class="price-card"><h4>🔴 งานแก้ 0 ร มส</h4><p>จดน้อย 9฿/หน้า | จดเยอะ 14฿/หน้า</p></div>
+        <div class="price-card"><h4>📚 งานค้าง</h4><p>เริ่มต้น 15฿ (ตามความยาก)</p></div>
+        <div class="price-card"><h4>🎨 ใบงาน Canva</h4><p>เริ่มต้น 20฿/แผ่น</p></div>
+        <div class="price-card"><h4>🖥️ สไลด์แคนวา</h4><p>เริ่มต้น 30฿ (5-10 สไลด์)</p></div>
     </div>
 
-    <div id="orderModal" class="modal">
+    <div id="jobModal" class="modal">
         <div class="modal-content">
-            <div class="form-header">ฟอร์มจ้างงาน</div>
-            <input type="text" id="custName" placeholder="ชื่อของคุณ" style="width: 90%; padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #ddd;">
+            <div class="form-header-title">ฟอร์มจ้างงาน</div>
+            <input type="text" placeholder="ชื่อของคุณ" style="width:100%; padding:10px; margin-bottom:15px; border-radius:10px; border:1px solid #ddd;">
             
             <p>เลือกประเภทงาน:</p>
-            <div class="job-grid" id="jobGrid">
-                <div class="job-option" onclick="selectJob(this, '📝 แก้ข้อสอบ')">📝 แก้ข้อสอบ</div>
-                <div class="job-option" onclick="selectJob(this, '🔴 แก้ 0 ร มส')">🔴 แก้ 0 ร มส</div>
-                <div class="job-option" onclick="selectJob(this, '📚 งานค้าง')">📚 งานค้าง</div>
-                <div class="job-option" onclick="selectJob(this, '🎨 ใบงาน Canva')">🎨 ใบงาน Canva</div>
-                <div class="job-option" onclick="selectJob(this, '🖥️ สไลด์พรีเซนต์')">🖥️ สไลด์พรีเซนต์</div>
-                <div class="job-option" onclick="selectJob(this, '✨ งานอื่นๆ')">✨ งานอื่นๆ</div>
+            <div class="job-selector">
+                <div class="job-btn" onclick="this.classList.toggle('active')">📝 แก้ข้อสอบ</div>
+                <div class="job-btn" onclick="this.classList.toggle('active')">🔴 แก้ 0 ร มส</div>
+                <div class="job-btn" onclick="this.classList.toggle('active')">📚 งานค้าง</div>
+                <div class="job-btn" onclick="this.classList.toggle('active')">🎨 ใบงาน Canva</div>
+                <div class="job-btn" onclick="this.classList.toggle('active')">🖥️ สไลด์แคนวา</div>
             </div>
 
-            <p>วิธีชำระเงิน:</p>
-            <div style="display: flex; gap: 10px;">
-                <button onclick="selectPay(this, 'Cash')" style="flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #ddd; background: white;">💵 เงินสด</button>
-                <button onclick="selectPay(this, 'Transfer')" style="flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #ddd; background: white;">📱 โอนเงิน</button>
-            </div>
-
-            <div style="background: #fff8e1; padding: 15px; border-radius: 10px; margin-top: 20px; font-size: 0.9rem;">
-                ⚠️ โปรดนำเงินมาชำระภายใน 1-2 วัน หลังจากจ้างงาน
-            </div>
-            
-            <button onclick="submitOrder()" style="width: 100%; background: #00d084; color: white; border: none; padding: 15px; border-radius: 15px; margin-top: 15px; cursor: pointer; font-weight: 600;">✅ ส่งจ้างงาน</button>
-            <button onclick="closeModal('orderModal')" style="width: 100%; background: none; border: none; color: #888; margin-top: 10px; cursor: pointer;">ปิดหน้าต่าง</button>
+            <button style="width:100%; background:#00d084; color:white; border:none; padding:15px; border-radius:15px; margin-top:20px; font-weight:bold;">✅ ส่งจ้างงาน</button>
+            <center><p onclick="document.getElementById('jobModal').style.display='none'" style="cursor:pointer; color:#888;">ปิดหน้าต่าง</p></center>
         </div>
     </div>
 
     <div id="adminModal" class="modal">
         <div class="modal-content">
-            <h3>⚙️ การจัดการแอดมิน</h3>
-            <div class="admin-menu-item" onclick="changeAdminPassword()">เปลี่ยนรหัสผ่าน <i class="fas fa-chevron-right"></i></div>
-            <div class="admin-menu-item" onclick="setWebhook()">ตั้งค่า Webhook (Discord/Line) <i class="fas fa-chevron-right"></i></div>
-            <div class="admin-menu-item" onclick="changeQRCode()">เปลี่ยนรูป QR Code <i class="fas fa-chevron-right"></i></div>
-            <div class="admin-menu-item" onclick="manageReviews()">ลบรีวิวลูกค้า <i class="fas fa-chevron-right"></i></div>
-            <div class="admin-menu-item" onclick="updateWorkStatus()">อัปเดตสถานะงานลูกค้า <i class="fas fa-chevron-right"></i></div>
-            <button onclick="closeModal('adminModal')" style="width: 100%; margin-top: 20px; padding: 10px;">ปิด</button>
+            <h3>⚙️ ระบบจัดการแอดมิน</h3>
+            <div class="admin-item" onclick="newPass()">เปลี่ยนรหัสผ่านแอดมิน <i class="fas fa-key"></i></div>
+            <div class="admin-item">ตั้งค่า Webhook <i class="fas fa-link"></i></div>
+            <div class="admin-item">เปลี่ยนรูป QR Code <i class="fas fa-qrcode"></i></div>
+            <div class="admin-item">ลบรีวิวลูกค้า <i class="fas fa-trash"></i></div>
+            <div class="admin-item">ให้สถานะลูกค้า <i class="fas fa-user-tag"></i></div>
+            <button onclick="document.getElementById('adminModal').style.display='none'" style="width:100%; margin-top:15px;">ปิด</button>
         </div>
     </div>
 
-    <div class="footer">
-        <p>ติดต่อเราที่นี่</p>
-        <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-            <a href="#" class="social-link"><i class="fab fa-facebook"></i> Facebook</a>
-            <a href="#" class="social-link"><i class="fab fa-instagram"></i> Instagram</a>
+    <div class="review-section">
+        <p>💬 รีวิวจากลูกค้า</p>
+        <div class="review-card">
+            <div class="review-pfp">😊</div>
+            <div><strong>น้องเอ</strong><br>งานไวมากครับ ทันส่งครูพอดีเลย</div>
         </div>
+        <button onclick="addReview()" style="width:100%; padding:10px; border:1px dashed #ff4d6d; color:#ff4d6d; background:none; border-radius:10px; cursor:pointer;">+ เขียนรีวิวและเลือกอิโมจิโปรไฟล์</button>
+    </div>
+
+    <div class="footer-contact">
+        <p>ติดต่อเราที่นี่</p>
+        <a href="#" class="social-btn"><i class="fab fa-facebook"></i> Facebook</a>
+        <a href="#" class="social-btn"><i class="fab fa-instagram"></i> Instagram</a>
     </div>
 
     <script>
-        let currentJob = "";
-        let currentPay = "";
-        let adminPass = "1234"; // รหัสเริ่มต้น (เปลี่ยนได้ในเมนูแอดมิน)
-        let webhookUrl = "";
+        let myPass = "1234"; // รหัสตั้งต้น
 
-        // ฟังก์ชันเปิด/ปิด Modal
-        function openOrderForm() { document.getElementById('orderModal').style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-        function selectJob(el, job) {
-            document.querySelectorAll('.job-option').forEach(opt => opt.classList.remove('active'));
-            el.classList.add('active');
-            currentJob = job;
-        }
-
-        function selectPay(el, pay) {
-            currentPay = pay;
-            alert("เลือกชำระแบบ: " + (pay === 'Cash' ? 'เงินสด' : 'โอนเงิน'));
-        }
-
-        // ระบบ Admin
-        function openAdminLogin() {
-            let pass = prompt("กรุณาใส่รหัสผ่านแอดมิน:");
-            if (pass === adminPass) {
+        function checkAdminPass() {
+            let p = prompt("ใส่รหัสแอดมิน:");
+            if(p === myPass) {
                 document.getElementById('adminModal').style.display = 'flex';
-            } else {
-                alert("รหัสผ่านไม่ถูกต้อง!");
-            }
+            } else { alert("รหัสผิด!"); }
         }
 
-        function changeAdminPassword() {
-            let newPass = prompt("ระบุรหัสผ่านใหม่:");
-            if(newPass) { adminPass = newPass; alert("เปลี่ยนรหัสผ่านสำเร็จ!"); }
+        function newPass() {
+            let n = prompt("ระบุรหัสผ่านใหม่:");
+            if(n) { myPass = n; alert("เปลี่ยนรหัสแล้ว!"); }
         }
 
-        function setWebhook() {
-            webhookUrl = prompt("วาง URL Webhook ของคุณที่นี่:", webhookUrl);
-            alert("บันทึก Webhook แล้ว!");
+        function addReview() {
+            let msg = prompt("พิมพ์รีวิวของคุณ:");
+            let emo = prompt("เลือกอิโมจิโปรไฟล์ (เช่น 😎, ✨, 😍):");
+            // ส่วนประมวลผลเพิ่มรีวิวจะอยู่ตรงนี้
         }
-
-        function changeQRCode() {
-            alert("เลือกรูปภาพใหม่เพื่ออัปโหลด (ฟีเจอร์นี้ต้องเชื่อมต่อ Firebase/Cloud)");
-        }
-
-        // ระบบรีวิว (จำลอง)
-        const reviews = [
-            { name: "น้องเอ", text: "งานไวมากครับ ทันส่งครูพอดีเลย", icon: "😊" },
-            { name: "น้องบี", text: "Canva สวยมากค่ะ ประทับใจ", icon: "✨" }
-        ];
-
-        function displayReviews() {
-            const list = document.getElementById('reviewList');
-            list.innerHTML = reviews.map((r, index) => `
-                <div class="review-card">
-                    <div class="profile-img">${r.icon}</div>
-                    <div>
-                        <strong>${r.name}</strong>
-                        <p style="margin: 5px 0 0 0; color: #666;">${r.text}</p>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function openReviewForm() {
-            let name = prompt("ชื่อของคุณ:");
-            let text = prompt("ความประทับใจ:");
-            if(name && text) {
-                reviews.push({ name: name, text: text, icon: "👤" });
-                displayReviews();
-            }
-        }
-
-        // เริ่มต้นระบบ
-        displayReviews();
     </script>
 </body>
 </html>
